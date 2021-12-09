@@ -65,18 +65,11 @@ stages:
               arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-restore'
               nobuild: true
               versioningScheme: 'off'
-          - task: NuGetAuthenticate@0
-            displayName: 'Authenticate on NuGet.org'
-            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-            inputs:
-              nugetServiceConnections: 'NuGetOrgConnection'
-          - task: NuGetCommand@2
+          - task: CmdLine@2
             displayName: Push
-            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
             inputs:
-              command: push
-              nuGetFeedType: 'external'              
-              allowPackageConflicts: true
+              script: 'dotnet nuget push *.nupkg --api-key $(nugetApiKey) --source https://api.nuget.org/v3/index.json --skip-duplicate'
+              workingDirectory: '$(Build.ArtifactStagingDirectory)'
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: "$(Build.ArtifactStagingDirectory)"
