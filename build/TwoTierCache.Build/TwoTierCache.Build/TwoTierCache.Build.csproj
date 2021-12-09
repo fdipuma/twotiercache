@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.Build.Traversal">
+  <PropertyGroup>
+    <TestInParallel>true</TestInParallel>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\*\*.*proj" Test="false" />
+    <ProjectReference Include="..\test\*\*.*proj" Test="true" />
+  </ItemGroup>
+</Project>

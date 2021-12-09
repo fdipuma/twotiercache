@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FEFE1B67-A7B9-4D13-8A11-A4571465D403}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{70780462-A936-47A9-B913-8B03138EEBF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache", "src\TwoTierCache\TwoTierCache.csproj", "{0B81C7A6-EFC4-4DF6-8538-B63A169185EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.Abstractions", "src\TwoTierCache.Abstractions\TwoTierCache.Abstractions.csproj", "{56D586BA-AA21-402F-A937-115ADF837697}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.EvictionSignaling.Redis", "src\TwoTierCache.EvictionSignaling.Redis\TwoTierCache.EvictionSignaling.Redis.csproj", "{6AC7BAB4-4B6D-4BDE-A310-E2D2B0D13571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.AspNetCore.TicketStore", "src\TwoTierCache.AspNetCore.TicketStore\TwoTierCache.AspNetCore.TicketStore.csproj", "{A713EE18-F38B-46F7-A8E8-AFBA50F9AA1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{95A485A2-28D8-4CB2-8EC9-7CCE8EB33BD0}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		coverlet.runsettings.xml = coverlet.runsettings.xml
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.Tests", "test\TwoTierCache.Tests\TwoTierCache.Tests.csproj", "{CE32DEC7-6A90-4365-BDE3-2AB4E661F040}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.EvictionSignaling.Redis.Tests", "test\TwoTierCache.EvictionSignaling.Redis.Tests\TwoTierCache.EvictionSignaling.Redis.Tests.csproj", "{B3947AA5-3051-48BD-BCD8-5FF546503EDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.AspNetCore.TicketStore.Tests", "test\TwoTierCache.AspNetCore.TicketStore.Tests\TwoTierCache.AspNetCore.TicketStore.Tests.csproj", "{BF3E53C1-0CF0-40D9-975C-440FD2FD5FC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0E82C296-5A24-4F79-A92E-E20E3FF481E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.Build", "build\TwoTierCache.Build\TwoTierCache.Build\TwoTierCache.Build.csproj", "{7B66C681-2674-49C0-8CA4-F8D88EFF8D11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0B81C7A6-EFC4-4DF6-8538-B63A169185EF} = {FEFE1B67-A7B9-4D13-8A11-A4571465D403}
+		{56D586BA-AA21-402F-A937-115ADF837697} = {FEFE1B67-A7B9-4D13-8A11-A4571465D403}
+		{6AC7BAB4-4B6D-4BDE-A310-E2D2B0D13571} = {FEFE1B67-A7B9-4D13-8A11-A4571465D403}
+		{A713EE18-F38B-46F7-A8E8-AFBA50F9AA1B} = {FEFE1B67-A7B9-4D13-8A11-A4571465D403}
+		{CE32DEC7-6A90-4365-BDE3-2AB4E661F040} = {70780462-A936-47A9-B913-8B03138EEBF2}
+		{B3947AA5-3051-48BD-BCD8-5FF546503EDB} = {70780462-A936-47A9-B913-8B03138EEBF2}
+		{BF3E53C1-0CF0-40D9-975C-440FD2FD5FC1} = {70780462-A936-47A9-B913-8B03138EEBF2}
+		{7B66C681-2674-49C0-8CA4-F8D88EFF8D11} = {0E82C296-5A24-4F79-A92E-E20E3FF481E8}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B81C7A6-EFC4-4DF6-8538-B63A169185EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B81C7A6-EFC4-4DF6-8538-B63A169185EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B81C7A6-EFC4-4DF6-8538-B63A169185EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B81C7A6-EFC4-4DF6-8538-B63A169185EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D586BA-AA21-402F-A937-115ADF837697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D586BA-AA21-402F-A937-115ADF837697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D586BA-AA21-402F-A937-115ADF837697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D586BA-AA21-402F-A937-115ADF837697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AC7BAB4-4B6D-4BDE-A310-E2D2B0D13571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AC7BAB4-4B6D-4BDE-A310-E2D2B0D13571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AC7BAB4-4B6D-4BDE-A310-E2D2B0D13571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AC7BAB4-4B6D-4BDE-A310-E2D2B0D13571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A713EE18-F38B-46F7-A8E8-AFBA50F9AA1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A713EE18-F38B-46F7-A8E8-AFBA50F9AA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A713EE18-F38B-46F7-A8E8-AFBA50F9AA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A713EE18-F38B-46F7-A8E8-AFBA50F9AA1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE32DEC7-6A90-4365-BDE3-2AB4E661F040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE32DEC7-6A90-4365-BDE3-2AB4E661F040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE32DEC7-6A90-4365-BDE3-2AB4E661F040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE32DEC7-6A90-4365-BDE3-2AB4E661F040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3947AA5-3051-48BD-BCD8-5FF546503EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3947AA5-3051-48BD-BCD8-5FF546503EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3947AA5-3051-48BD-BCD8-5FF546503EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3947AA5-3051-48BD-BCD8-5FF546503EDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3E53C1-0CF0-40D9-975C-440FD2FD5FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3E53C1-0CF0-40D9-975C-440FD2FD5FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3E53C1-0CF0-40D9-975C-440FD2FD5FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3E53C1-0CF0-40D9-975C-440FD2FD5FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B66C681-2674-49C0-8CA4-F8D88EFF8D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B66C681-2674-49C0-8CA4-F8D88EFF8D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal

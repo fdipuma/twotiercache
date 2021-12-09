@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <WeaverConfiguration>
+      <Weavers>
+        <RuntimeNullables />
+      </Weavers>
+    </WeaverConfiguration>
+
+    <Authors>Federico Dipuma</Authors>
+    <Description>Two-Tier cache implementation (in memory plus distributed)</Description>
+    <Copyright>(C) 2021 Federico Dipuma</Copyright>
+    <PackageProjectUrl>https://github.com/fdipuma/twotiercache</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/fdipuma/twotiercache</RepositoryUrl>
+  </PropertyGroup>
+</Project>
