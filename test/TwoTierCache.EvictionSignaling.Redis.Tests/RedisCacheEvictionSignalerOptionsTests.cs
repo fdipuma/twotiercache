@@ -63,9 +63,20 @@ public class RedisCacheEvictionSignalerOptionsTests : RedisTestBase
 
         await signaler.StartAsync(CancellationToken.None);
 
-        Multiplexer.GetSubscriber().Publish(options.EvictionChannelName, key);
+        var sub = Multiplexer.GetSubscriber();
+
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        sub.Subscribe(options.EvictionChannelName, (channel, value) =>
+        {
+            if (value == key)  tcs.TrySetResult();
+        });
+        
+        sub.Publish(options.EvictionChannelName, key);
 
         // Assert
+
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
         await Task.Delay(100);
 

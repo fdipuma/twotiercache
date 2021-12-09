@@ -31,7 +31,7 @@ public class RedisSignalerTests : RedisTestBase
 
         var sub = Multiplexer.GetSubscriber();
         
-        var tcs = new TaskCompletionSource();
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var notifiedKeys = new ConcurrentBag<string>();
 
@@ -52,6 +52,8 @@ public class RedisSignalerTests : RedisTestBase
 
         await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
+        await Task.Delay(100);
+
         notifiedKeys.Should().Contain(key);
         
         _cache.DidNotReceive()
@@ -67,7 +69,7 @@ public class RedisSignalerTests : RedisTestBase
 
         var sub = Multiplexer.GetSubscriber();
         
-        var tcs = new TaskCompletionSource();
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         var notifiedKeys = new ConcurrentBag<string>();
 
@@ -88,6 +90,8 @@ public class RedisSignalerTests : RedisTestBase
 
         await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
+        await Task.Delay(100);
+
         notifiedKeys.Should().Contain(key);
         
         _cache.DidNotReceive()
@@ -103,7 +107,7 @@ public class RedisSignalerTests : RedisTestBase
 
         var sub = Multiplexer.GetSubscriber();
         
-        var tcs = new TaskCompletionSource();
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         _cache
             .When(s => s.EvictLocal(key))
@@ -116,6 +120,8 @@ public class RedisSignalerTests : RedisTestBase
         // Assert
 
         await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        
+        await Task.Delay(100);
 
         _cache.Received(1)
             .EvictLocal(key);
