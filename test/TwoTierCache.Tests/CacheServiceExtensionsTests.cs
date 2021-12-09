@@ -43,7 +43,7 @@ public class CacheServiceExtensionsTests
     }
     
     [Fact]
-    public void Should_not_register_distributed_cache_entry_serializer_if_another_implementation_is_already_registered()
+    public void Should_register_distributed_cache_entry_serializers_as_enumerable_if_another_implementation_is_already_registered()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -53,10 +53,9 @@ public class CacheServiceExtensionsTests
         services.AddTwoTierCache();
 
         // Assert
-        services.Should().ContainSingle(desc => desc.ServiceType == typeof(IDistributedCacheEntrySerializer))
-            .Which
-            .Should()
-            .Match<ServiceDescriptor>(e => e.Lifetime == ServiceLifetime.Singleton);
+        var serializers = services.Where(desc => desc.ServiceType == typeof(IDistributedCacheEntrySerializer));
+
+        serializers.Should().HaveCount(2);
     }
 
     [Fact]
