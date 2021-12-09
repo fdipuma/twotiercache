@@ -34,8 +34,10 @@ public class TwoTierCacheTicketStore : ITicketStore
         await SetAsync(key, ticket, cancellationToken);
     }
 
+#pragma warning disable CS8613
     public Task<AuthenticationTicket?> RetrieveAsync(string key) => RetrieveAsync(key, default);
-
+#pragma warning restore CS8613
+    
     public async Task<AuthenticationTicket?> RetrieveAsync(string key, CancellationToken cancellationToken)
     {
         return await _cache.GetAsync<AuthenticationTicket>(key, cancellationToken);

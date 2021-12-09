@@ -90,10 +90,10 @@ public class TwoTierCacheTicketStoreTests
             .RemoveAsync(key, Arg.Any<CancellationToken>());
     }
 
-    public static IEnumerable<object[]> ExpirationData => new List<object[]>
+    public static IEnumerable<object?[]> ExpirationData => new List<object?[]>
     {
-        new object[] { default(DateTimeOffset?) },
-        new object[] { new DateTimeOffset(2021, 1, 1, 10, 0, 0, TimeSpan.Zero) }
+        new object?[] { default(DateTimeOffset?) },
+        new object?[] { new DateTimeOffset(2021, 1, 1, 10, 0, 0, TimeSpan.Zero) }
     };
 
     private static AuthenticationTicket CreateAuthenticationTicket(DateTimeOffset? expectedExpiration = default)
