@@ -5,6 +5,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <WeaverConfiguration>
       <Weavers>
         <RuntimeNullables />
