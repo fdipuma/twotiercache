@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.AspNetCore.Tic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0E82C296-5A24-4F79-A92E-E20E3FF481E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.Build", "build\TwoTierCache.Build\TwoTierCache.Build\TwoTierCache.Build.csproj", "{7B66C681-2674-49C0-8CA4-F8D88EFF8D11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoTierCache.Build", "build\TwoTierCache.Build\TwoTierCache.Build.csproj", "{7B66C681-2674-49C0-8CA4-F8D88EFF8D11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
