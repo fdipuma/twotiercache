@@ -58,12 +58,13 @@ stages:
               command: custom
               custom: tool
               arguments: 'install --global dotnet-reportgenerator-globaltool'        
-          - script: reportgenerator "-reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml" "-targetdir:$(root)/code_coverage" -reporttypes:HtmlInline_AzurePipelines;Cobertura
+          - script: reportgenerator "-reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml" "-targetdir:$(root)/code_coverage" "-reporttypes:HtmlInline_AzurePipelines;Cobertura"
             displayName: Merge code coverage files
           - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: 'cobertura'
               summaryFileLocation: '$(root)/code_coverage/coverage.cobertura.xml'
+              reportDirectory: '$(root)/code_coverage'
           - task: DotNetCoreCLI@2
             displayName: Pack
             condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
