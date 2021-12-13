@@ -63,7 +63,7 @@ stages:
           - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: 'cobertura'
-              summaryFileLocation: '$(root)/code_coverage/coverage.cobertura.xml'
+              summaryFileLocation: '$(root)/code_coverage/*.xml'
               reportDirectory: '$(root)/code_coverage'
           - task: DotNetCoreCLI@2
             displayName: Pack
