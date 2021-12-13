@@ -52,10 +52,18 @@ stages:
               command: test
               projects: $(buildProject)
               arguments: '--configuration $(buildConfiguration) --no-build --no-restore --collect:"XPlat Code Coverage" --settings $(root)/coverlet.runsettings.xml'
+          - task: DotNetCoreCLI@2
+            displayName: 'Install ReportGenerator'
+            inputs:
+              command: custom
+              custom: tool
+              arguments: 'install --global dotnet-reportgenerator-globaltool'        
+          - script: reportgenerator "-reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml" "-targetdir:$(root)/code_coverage" -reporttypes:HtmlInline_AzurePipelines;Cobertura
+            displayName: Merge code coverage files
           - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: 'cobertura'
-              summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+              summaryFileLocation: '$(root)/code_coverage/coverage.cobertura.xml'
           - task: DotNetCoreCLI@2
             displayName: Pack
             condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
