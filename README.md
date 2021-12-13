@@ -1,5 +1,7 @@
 # Two-Tier Cache
 
+[![Build Status](https://dev.azure.com/federicodipuma/twotiercache/_apis/build/status/fdipuma.twotiercache?branchName=main)](https://dev.azure.com/federicodipuma/twotiercache/_build/latest?definitionId=3&branchName=main) ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/federicodipuma/twotiercache/3?compact_message) ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/federicodipuma/twotiercache/3)
+
 ## Overview
 
 TwoTierCache is an super-simple open source caching implementation for .NET that supports a two-tier strategy for setting and retrieving cached values.
@@ -12,19 +14,18 @@ This project was inspired by [this post by StackOverflow](https://nickcraver.com
 
 ## Packages
 
-
-| Name                                 | Description                                                                                                                  |
-|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| TwoTierCache.Abstractions            | Interfaces and other abstractions used by the other packages                                                                 |
-| TwoTierCache                         | Main implementation of a default `ITwoTierCache` that uses `Microsoft.Extensions.Caching` primitives for `IDistributedCache` |
-| TwoTierCache.EvictionSignaling.Redis | Backplane service that uses Redis for syncing in memory evictions from multiple instances (using Redis pub/sub)              |
-| TwoTierCache.AspNetCore.TicketStore  | Custom `ITicketStore` for ASP.NET Core to be used as Session Store of `AuthenticationTicket` in case of Cookies Auth         |
+| Name                                 | NuGet Package                                                                                                                                         | Description                                                                                                                  |
+|--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| TwoTierCache.Abstractions            | [![Nuget](https://img.shields.io/nuget/v/TwoTierCache.Abstractions)](https://www.nuget.org/packages/TwoTierCache.Abstractions/)                       | Interfaces and other abstractions used by the other packages                                                                 |
+| TwoTierCache                         | [![Nuget](https://img.shields.io/nuget/v/TwoTierCache)](https://www.nuget.org/packages/TwoTierCache/)                                                 | Main implementation of a default `ITwoTierCache` that uses `Microsoft.Extensions.Caching` primitives for `IDistributedCache` |
+| TwoTierCache.EvictionSignaling.Redis | [![Nuget](https://img.shields.io/nuget/v/TwoTierCache.EvictionSignaling.Redis)](https://www.nuget.org/packages/TwoTierCache.EvictionSignaling.Redis/) | Backplane service that uses Redis for syncing in memory evictions from multiple instances (using Redis pub/sub)              |
+| TwoTierCache.AspNetCore.TicketStore  | [![Nuget](https://img.shields.io/nuget/v/TwoTierCache.AspNetCore.TicketStore)](https://www.nuget.org/packages/TwoTierCache.AspNetCore.TicketStore/)   | Custom `ITicketStore` for ASP.NET Core to be used as Session Store of `AuthenticationTicket` in case of Cookies Auth         |
 
 ## Quick start
 
 ### ASP.NET Core App
 
-For a simple scenario that uses `Microsoft.Extensions.Caching` `MemoryCache` as first layer and Redis as second layer inside an AspNetCore app.
+Simple scenario that uses `Microsoft.Extensions.Caching.MemoryCache` as the first layer and Redis as the second layer inside an AspNetCore app.
 
 1. First install nuget packages
 
@@ -74,7 +75,7 @@ public class SampleController : Controller
     public async Task<ToDoItem> Get(int id, CancellationToken token)
     {
         var cacheKey = $"todo-{id}";
-        var item = await _cache.GetAsync(cacheKey, token);
+        var item = await _cache.GetAsync<ToDoItem>(cacheKey, token);
         
         if (item is null)
         {
@@ -102,7 +103,7 @@ public class SampleController : Controller
 
 ### Cookies Authentication SessionStore
 
-In ASP.NET Core Cookies authentication stores all auth session information (e.g. claims) into a cookie.
+In ASP.NET Core, Cookies Authentication stores all auth session information (e.g. claims) into a cookie.
 
 This makes the entire interaction stateless (which is good) but also allows this cookie to grow indefinitely each time a new claim is added to the user identity.
 
