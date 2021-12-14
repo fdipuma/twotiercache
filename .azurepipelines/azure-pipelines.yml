@@ -20,6 +20,8 @@ variables:
   buildProject: "$(root)/build/TwoTierCache.Build/TwoTierCache.Build.csproj"
 
   vmImageName: "ubuntu-latest"
+  
+  disable.coverage.autogenerate: 'true'
 
 stages:
   - stage: Build
