@@ -17,7 +17,7 @@ public interface ITwoTierCache
     /// <param name="cancellationToken">Optional. The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <typeparam name="T">The type of the value to set in the cache.</typeparam>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    Task SetAsync<T>(string key, T value, TwoTierCacheEntryOptions options,
+    ValueTask SetAsync<T>(string key, T value, TwoTierCacheEntryOptions options,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -27,7 +27,7 @@ public interface ITwoTierCache
     /// <param name="cancellationToken">Optional. The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <typeparam name="T">The type of the value to retrieve.</typeparam>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the located value or null.</returns>
-    Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default);
+    ValueTask<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Removes the value with the given key from all cache tiers.
@@ -35,7 +35,7 @@ public interface ITwoTierCache
     /// <param name="key">A string identifying the requested value.</param>
     /// <param name="cancellationToken">Optional. The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
+    ValueTask RemoveAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Evicts the value with the given key only from the in memory tier of the cache. This is used for managing remote eviction signals from

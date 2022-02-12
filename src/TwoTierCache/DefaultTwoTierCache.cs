@@ -30,7 +30,7 @@ public class DefaultTwoTierCache : ITwoTierCache
         _serializers = orderedSerializers;
     }
 
-    public async Task SetAsync<T>(string key, T value, TwoTierCacheEntryOptions options,
+    public async ValueTask SetAsync<T>(string key, T value, TwoTierCacheEntryOptions options,
         CancellationToken cancellationToken = default)
     {
         _memoryCache.Set(key, value, new MemoryCacheEntryOptions { AbsoluteExpiration = options.AbsoluteExpiration });
@@ -43,7 +43,7 @@ public class DefaultTwoTierCache : ITwoTierCache
         EntrySet?.Invoke(this, new TwoTierCacheEntrySetEventArgs(key, value));
     }
 
-    public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
+    public async ValueTask<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {
         if (_memoryCache.TryGetValue(key, out var result))
         {
@@ -65,7 +65,7 @@ public class DefaultTwoTierCache : ITwoTierCache
         return entry.Value;
     }
 
-    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+    public async ValueTask RemoveAsync(string key, CancellationToken cancellationToken = default)
     {
         _memoryCache.Remove(key);
         await _distributedCache.RemoveAsync(key, cancellationToken);
