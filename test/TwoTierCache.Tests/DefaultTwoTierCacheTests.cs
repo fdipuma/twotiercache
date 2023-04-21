@@ -47,9 +47,10 @@ public class DefaultTwoTierCacheTests
     {
         var key = GetRandomKey();
 
-        var item = await _sut.GetAsync<CacheItem>(key);
+        var result = await _sut.TryGetAsync<CacheItem>(key);
 
-        item.Should().BeNull();
+        result.Success.Should().BeFalse();
+        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -65,10 +66,11 @@ public class DefaultTwoTierCacheTests
         _memoryCache.Remove(key);
         _distributedCache.Set(key, content);
 
-        var item = await _sut.GetAsync<CacheItem>(key);
+        var result = await _sut.TryGetAsync<CacheItem>(key);
 
-        item.Should().NotBeNull();
-        item!.InnerValue.Should().Be("hello");
+        result.Success.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Value!.InnerValue.Should().Be("hello");
     }
 
     [Fact]
@@ -81,9 +83,40 @@ public class DefaultTwoTierCacheTests
         _memoryCache.Remove(key);
         _distributedCache.Set(key, content);
 
-        var item = await _sut.GetAsync<CacheItem>(key);
+        var result = await _sut.TryGetAsync<CacheItem>(key);
 
-        item.Should().BeNull();
+        result.Success.Should().BeTrue();
+        result.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Should_get_null_from_distributed_when_cache_miss()
+    {
+        var key = GetRandomKey();
+
+        var content = Encoding.UTF8.GetBytes("null");
+
+        _memoryCache.Remove(key);
+        _distributedCache.Remove(key);
+
+        var result = await _sut.GetAsync<CacheItem>(key);
+
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Should_get_null_from_distributed_when_cache_entry_is_null()
+    {
+        var key = GetRandomKey();
+
+        var content = Encoding.UTF8.GetBytes("null");
+
+        _memoryCache.Set(key, (CacheItem?)null);
+        _distributedCache.Set(key, content);
+        
+        var result = await _sut.GetAsync<CacheItem>(key);
+
+        result.Should().BeNull();
     }
 
     [Fact]
@@ -99,7 +132,7 @@ public class DefaultTwoTierCacheTests
         _memoryCache.Remove(key);
         _distributedCache.Set(key, content);
 
-        _ = await _sut.GetAsync<CacheItem>(key);
+        _ = await _sut.TryGetAsync<CacheItem>(key);
 
         _memoryCache.Get(key).Should().NotBeNull();
     }
@@ -113,7 +146,7 @@ public class DefaultTwoTierCacheTests
 
         _memoryCache.Set(key, content);
 
-        _ = await _sut.GetAsync<CacheItem>(key);
+        _ = await _sut.TryGetAsync<CacheItem>(key);
 
         var result = _memoryCache.Get<CacheItem>(key);
 
@@ -139,6 +172,40 @@ public class DefaultTwoTierCacheTests
         entry.Should().NotBeNull();
 
         entry!.Value!.InnerValue.Should().Be(content.InnerValue);
+    }
+
+    [Fact]
+    public async Task Should_set_null_into_distributed_cache()
+    {
+        var key = GetRandomKey();
+
+        CacheItem? content = null;
+
+        await _sut.SetAsync(key, content, new TwoTierCacheEntryOptions());
+
+        var distributedValue = _distributedCache.Get(key);
+
+        distributedValue.Should().NotBeNull();
+
+        var item = _serializer.Deserialize<CacheItem>(distributedValue);
+
+        item.Should().NotBeNull();
+        item!.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Should_set_null_into_memory_cache()
+    {
+        var key = GetRandomKey();
+
+        CacheItem? content = null;
+
+        await _sut.SetAsync(key, content, new TwoTierCacheEntryOptions());
+
+        var valueRetrieved = _memoryCache.TryGetValue(key, out var actualContent);
+
+        valueRetrieved.Should().BeTrue();
+        actualContent.Should().BeNull();
     }
 
     [Fact]
@@ -335,18 +402,68 @@ public class DefaultTwoTierCacheTests
         
         // Act/Assert
         
-        await sut.Awaiting(s => s.GetAsync<CacheItem>(key, default))
+        await sut.Awaiting(s => s.TryGetAsync<CacheItem>(key, default))
             .Should()
             .ThrowExactlyAsync<NotSupportedException>();
+    }
+    
+    [Fact]
+    public async Task Should_call_value_factory_only_once_when_GetOrCreateAsync_called_from_multiple_threads()
+    {
+        const string key = "cachekey";
+
+        var valueFactoryCallCount = 0;
+
+        async Task<CacheItem> AsyncValueFactory(TwoTierCacheEntryOptions options)
+        {
+            Interlocked.Add(ref valueFactoryCallCount, 1);
+            await Task.Delay(100);
+            return new CacheItem { InnerValue = "inner" };
+        }
+
+        var results = await Task.WhenAll(
+            Task.Run(() => _sut.GetOrCreateAsync(key, AsyncValueFactory)),
+            Task.Run(() => _sut.GetOrCreateAsync(key, AsyncValueFactory)),
+            Task.Run(() => _sut.GetOrCreateAsync(key, AsyncValueFactory))
+        );
+
+        valueFactoryCallCount.Should().Be(1);
+        results.Distinct().Should().HaveCount(1);
+    }
+
+    [Fact]
+    public async Task Should_return_from_cache_when_GetOrCreateAsync_called_and_get_returns_a_value()
+    {
+        const string key = "cachekey";
+        
+        var valueFactoryCallCount = 0;
+
+        _memoryCache.Set(key, new CacheItem { InnerValue = "cached" });
+
+        async Task<CacheItem> AsyncValueFactory(TwoTierCacheEntryOptions options)
+        {
+            Interlocked.Add(ref valueFactoryCallCount, 1);
+            await Task.Delay(100);
+            return new CacheItem { InnerValue = "inner" };
+        }
+
+        var results = await Task.WhenAll(
+            Task.Run(() => _sut.GetOrCreateAsync(key, AsyncValueFactory)),
+            Task.Run(() => _sut.GetOrCreateAsync(key, AsyncValueFactory)),
+            Task.Run(() => _sut.GetOrCreateAsync(key, AsyncValueFactory))
+        );
+
+        valueFactoryCallCount.Should().Be(0);
+        results.Distinct().Should().HaveCount(1);
     }
 
     private static string GetRandomKey()
     {
         return Guid.NewGuid().ToString();
     }
+}
 
-    public class CacheItem
-    {
-        public string? InnerValue { get; set; }
-    }
+public class CacheItem
+{
+    public string? InnerValue { get; set; }
 }
