@@ -40,7 +40,8 @@ public class TwoTierCacheTicketStore : ITicketStore
     
     public async Task<AuthenticationTicket?> RetrieveAsync(string key, CancellationToken cancellationToken)
     {
-        return await _cache.GetAsync<AuthenticationTicket>(key, cancellationToken);
+        var result = await _cache.TryGetAsync<AuthenticationTicket>(key, cancellationToken);
+        return result.Success ? result.Value : null;
     }
 
     public Task RemoveAsync(string key) => RemoveAsync(key, default);

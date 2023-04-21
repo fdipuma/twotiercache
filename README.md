@@ -75,19 +75,12 @@ public class SampleController : Controller
     public async Task<ToDoItem> Get(int id, CancellationToken token)
     {
         var cacheKey = $"todo-{id}";
-        var item = await _cache.GetAsync<ToDoItem>(cacheKey, token);
         
-        if (item is null)
+        return await _cache.GetOrCreateAsync<ToDoItem>(cacheKey, async entryOptions =>
         {
-            item = await _repository.GetItemAsync(id, token);
-            
-            if (item is not null)
-            {
-                await _cache.SetAsync(cacheKey, item, token);
-            }
-        }
-        
-        return item;
+            entryOptions.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5); //  handle cache expiration
+            return await _repository.GetItemAsync(id);
+        }, token);
     }
     
     [HttpPut("{id}")]

@@ -30,6 +30,26 @@ public interface ITwoTierCache
     ValueTask<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Tries to get a value with the given key from the cache.
+    /// </summary>
+    /// <param name="key">A string identifying the requested value.</param>
+    /// <param name="cancellationToken">Optional. The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <typeparam name="T">The type of the value to retrieve.</typeparam>
+    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing an <see cref="CacheResult{T}"/>.</returns>
+    ValueTask<CacheResult<T>> TryGetAsync<T>(string key, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a value with the given key from the cache and, if not found, creates an entry in all cache tiers using the specified value factory.
+    /// </summary>
+    /// <param name="key">A string identifying the value.</param>
+    /// <param name="asyncValueFactory">The function which will be called if the value is not found in the cache.</param>
+    /// <param name="cancellationToken">Optional. The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <typeparam name="T">The type of the value to set in the cache.</typeparam>
+    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    Task<T?> GetOrCreateAsync<T>(string key, Func<TwoTierCacheEntryOptions, Task<T>> asyncValueFactory,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Removes the value with the given key from all cache tiers.
     /// </summary>
     /// <param name="key">A string identifying the requested value.</param>

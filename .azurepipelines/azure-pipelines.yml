@@ -78,6 +78,7 @@ stages:
               versioningScheme: 'off'
           - task: CmdLine@2
             displayName: Push
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
             inputs:
               script: 'dotnet nuget push *.nupkg --api-key $(nugetApiKey) --source https://api.nuget.org/v3/index.json --skip-duplicate'
               workingDirectory: '$(Build.ArtifactStagingDirectory)'
