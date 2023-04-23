@@ -14,6 +14,9 @@ internal class LazyOperationTracker
 
     public Task<T> GetOrAddOperation<T>(string key, Func<string, Task<T>> valueFactory)
     {
+        // we use Lazy<Task<T>> so the ValueFactory method is invoked only once even in case multiple threads get access to
+        // the second param of ConcurrentDictionary.GetOrAdd: https://andrewlock.net/making-getoradd-on-concurrentdictionary-thread-safe-using-lazy/
+        
         var lazyOperation = _runningOperations.GetOrAdd(key, cacheKey =>
         {
             return new Lazy<object>(() => valueFactory.Invoke(cacheKey));

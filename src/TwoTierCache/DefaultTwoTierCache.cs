@@ -64,17 +64,18 @@ public class DefaultTwoTierCache : ITwoTierCache
     public async Task<T?> GetOrCreateAsync<T>(string key, Func<TwoTierCacheEntryOptions, Task<T>> asyncValueFactory,
         CancellationToken cancellationToken = default)
     {
-        var result = await TryGetInternalAsync<T>(key, cancellationToken);
-
-        if (result.Success)
-        {
-            return result.Value;
-        }
-
+        // try to avoid Cache Stampede when multiple threads are trying to GetOrSet the same key for the same ITwoTierCache.
+        // this way only one thread will be able to get from the cache, read from the ValueFactory, and then set into the cache
+        // concurrently.
+        // inspired by: https://github.com/IdentityModel/IdentityModel.AspNetCore/blob/81179cfa18a3e2ef5569b2a289ccbb9c87a22524/src/AccessTokenManagement/ClientAccessToken/ClientAccessTokenManagementService.cs#L59
+        
         try
         {
             return await _lazyOperationTracker.GetOrAddOperation(key, async cacheKey =>
             {
+                // we are sure this code  is only executed once in case of concurrency
+                // every other thread will use the result of this task as is
+
                 var getResult = await TryGetInternalAsync<T>(key, CancellationToken.None);
                 
                 if (getResult.Success)
