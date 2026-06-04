@@ -47,7 +47,12 @@ public class RedisCacheEvictionSignaler : BackgroundService
 
         subscription.OnMessage(message =>
         {
-            string keyToEvict = message.Message;
+            string? keyToEvict = message.Message;
+
+            if (keyToEvict is null)
+            {
+                return;
+            }
 
             var shouldSkipLocalEviction = _localEvictionKeys.TryRemove(keyToEvict, out _);
 
@@ -101,10 +106,16 @@ public class RedisCacheEvictionSignaler : BackgroundService
                         _connection = await ConnectionMultiplexer.ConnectAsync(_options.ConfigurationOptions)
                             .ConfigureAwait(false);
                     }
-                    else
+                    else if (_options.Configuration is not null)
                     {
                         _connection = await ConnectionMultiplexer.ConnectAsync(_options.Configuration)
                             .ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "No Redis connection configured. Set one of ConnectionMultiplexerFactory, " +
+                            "ConfigurationOptions, or Configuration on RedisCacheEvictionSignalerOptions.");
                     }
                 }
                 else

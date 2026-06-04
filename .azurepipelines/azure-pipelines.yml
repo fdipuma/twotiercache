@@ -35,9 +35,9 @@ stages:
           Azurite: Redis
         steps:          
           - task: UseDotNet@2
-            displayName: "Use .NET Core 6"
+            displayName: "Use .NET 10"
             inputs:
-              version: "6.x"
+              version: "10.x"
           - task: DotNetCoreCLI@2
             displayName: Restore
             inputs:
