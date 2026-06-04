@@ -67,12 +67,12 @@ public class RedisCacheEvictionSignalerOptionsTests : RedisTestBase
 
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        sub.Subscribe(options.EvictionChannelName, (channel, value) =>
+        sub.Subscribe(RedisChannel.Literal(options.EvictionChannelName), (channel, value) =>
         {
             if (value == key)  tcs.TrySetResult();
         });
-        
-        sub.Publish(options.EvictionChannelName, key);
+
+        sub.Publish(RedisChannel.Literal(options.EvictionChannelName), key);
 
         // Assert
 

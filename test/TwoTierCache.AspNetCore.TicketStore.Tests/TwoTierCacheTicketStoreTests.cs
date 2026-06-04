@@ -67,7 +67,7 @@ public class TwoTierCacheTicketStoreTests
         var key = Guid.NewGuid().ToString();
 
         _cache.TryGetAsync<AuthenticationTicket>(key, Arg.Any<CancellationToken>())
-            .Returns(new ValueTask<CacheResult<AuthenticationTicket?>>(new CacheResult<AuthenticationTicket?>(ticket)));
+            .Returns(new ValueTask<CacheResult<AuthenticationTicket>>(new CacheResult<AuthenticationTicket>(ticket)));
         
         // Act
         var retrievedTicket = await _store.RetrieveAsync(key);

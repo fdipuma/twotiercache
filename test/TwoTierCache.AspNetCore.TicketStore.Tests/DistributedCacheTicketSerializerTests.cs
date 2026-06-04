@@ -123,11 +123,13 @@ public class DistributedCacheTicketSerializerTests
 
         var value = distributedCache.Get(key);
 
+        value.Should().NotBeNull();
+
         var deserializedTicket = TicketSerializer.Default.Deserialize(value);
 
         deserializedTicket.Should().NotBeNull();
 
-        deserializedTicket!.Properties.ExpiresUtc.Should().Be(ticket.Properties.ExpiresUtc);
+        deserializedTicket.Properties.ExpiresUtc.Should().Be(ticket.Properties.ExpiresUtc);
     }
 
     private static AuthenticationTicket CreateAuthenticationTicket(DateTimeOffset? expectedExpiration = default)

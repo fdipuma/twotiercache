@@ -116,7 +116,7 @@ public class DefaultTwoTierCache : ITwoTierCache
     {
         if (_memoryCache.TryGetValue(key, out var result))
         {
-            return CacheResult<T>.Found((T) result);
+            return CacheResult<T>.Found((T?) result);
         }
 
         var bytes = await _distributedCache.GetAsync(key, cancellationToken);
@@ -147,7 +147,7 @@ public class DefaultTwoTierCache : ITwoTierCache
     /// <param name="options">The options to serialize</param>
     /// <typeparam name="T">Type of the value</typeparam>
     /// <returns>Binary data of serialized value and options</returns>
-    /// <exception cref="NotSupportedException">If no serializer is found that can serialize <see cref="T"/></exception>
+    /// <exception cref="NotSupportedException">If no serializer is found that can serialize <typeparamref name="T"/></exception>
     private byte[] Serialize<T>(T? value, TwoTierCacheEntryOptions options)
     {
         var serializer = _serializers.FirstOrDefault(s => s.CanSerialize(typeof(T)));
@@ -166,7 +166,7 @@ public class DefaultTwoTierCache : ITwoTierCache
     /// <param name="bytes">Binary serialized data.</param>
     /// <typeparam name="T">Type of the value</typeparam>
     /// <returns>A <see cref="DistributedCacheEntry{T}"/> containing the original value and options</returns>
-    /// <exception cref="NotSupportedException">If no serializer is found that can serialize <see cref="T"/></exception>
+    /// <exception cref="NotSupportedException">If no serializer is found that can serialize <typeparamref name="T"/></exception>
     private DistributedCacheEntry<T> Deserialize<T>(byte[] bytes)
     {
         var serializer = _serializers.FirstOrDefault(s => s.CanSerialize(typeof(T)));

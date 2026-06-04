@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using AwesomeAssertions;
 using NSubstitute;
+using StackExchange.Redis;
 using TwoTierCache.Abstractions;
 using TwoTierCache.Abstractions.Events;
 using Xunit;
@@ -35,9 +36,9 @@ public class RedisSignalerTests : RedisTestBase
 
         var notifiedKeys = new ConcurrentBag<string>();
 
-        sub.Subscribe(_options.EvictionChannelName, (_, value) =>
+        sub.Subscribe(RedisChannel.Literal(_options.EvictionChannelName), (_, value) =>
         {
-            notifiedKeys.Add(value);
+            notifiedKeys.Add(value.ToString());
 
             if (value == key)
             {
@@ -73,9 +74,9 @@ public class RedisSignalerTests : RedisTestBase
 
         var notifiedKeys = new ConcurrentBag<string>();
 
-        sub.Subscribe(_options.EvictionChannelName, (_, value) =>
+        sub.Subscribe(RedisChannel.Literal(_options.EvictionChannelName), (_, value) =>
         {
-            notifiedKeys.Add(value);
+            notifiedKeys.Add(value.ToString());
 
             if (value == key)
             {
@@ -115,7 +116,7 @@ public class RedisSignalerTests : RedisTestBase
 
         // Act
         
-        sub.Publish(_options.EvictionChannelName, key);
+        sub.Publish(RedisChannel.Literal(_options.EvictionChannelName), key);
 
         // Assert
 
