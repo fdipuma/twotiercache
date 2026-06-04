@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using NSubstitute;
 using StackExchange.Redis;
 using TwoTierCache.Abstractions;

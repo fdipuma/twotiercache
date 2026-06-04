@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using FluentAssertions;
+using AwesomeAssertions;
 using NSubstitute;
 using TwoTierCache.Abstractions;
 using TwoTierCache.Abstractions.Events;
